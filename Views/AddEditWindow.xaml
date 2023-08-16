@@ -1,0 +1,233 @@
+﻿<Window x:Class="Wpf_Kurvovaya_BD.Views.AddEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpf_Kurvovaya_BD.Views"
+        mc:Ignorable="d"
+        Title="Добавление нового игрока" 
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        FontSize="15"
+        Height="500" 
+        Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Name="TblInfo"
+                   Grid.ColumnSpan="2" Grid.Row="0"
+                   Text="Добавление нового игрока в БД(Таблица 'Наши игроки')"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <!-- Первый параметр записи -->
+        <TextBlock Name="TblFirstParam"
+                   Grid.Column="0" Grid.Row="1"
+                   Text="Фамилия игрока:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <TextBox Name="TbxFirstParam"
+                 Grid.Column="1" Grid.Row="1"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Width="200"/>
+
+        <!-- Второй параметр записи -->
+        <TextBlock Name="TblSecondParam"
+                   Grid.Column="0" Grid.Row="2"
+                   Text="Имя игрока:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <TextBox Name="TbxSecondParam"
+                 Grid.Column="1" Grid.Row="2"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Width="200"/>
+
+        <!-- Третий параметр записи -->
+        <TextBlock Name="TblThirdParam"
+                   Grid.Column="0" Grid.Row="3"
+                   Text="Отчество игрока:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <TextBox Name="TbxThirdParam"
+                 Grid.Column="1" Grid.Row="3"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Width="200"/>
+
+        <!-- Четвёртый параметр записи -->
+        <TextBlock Name="TblFourthParam"
+                   Grid.Column="0" Grid.Row="4"
+                   Text="Позиция игрока на поле:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <ComboBox Name="CbxFourthParam"
+                 Grid.Column="1" Grid.Row="4"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 IsEditable="False"
+                 Width="200"/>
+
+        <!-- Пятый параметр записи -->
+        <TextBlock Name="TblFivethParam"
+                   Grid.Column="0" Grid.Row="5"
+                   Text="Дата рождения:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <DatePicker Name="DateFivethParam"
+                    Grid.Column="1" Grid.Row="5"
+                    FontSize="18"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="200"/>
+
+
+        <!-- Шестой параметр записи -->
+        <TextBlock Name="TblSixthParam"
+                   Grid.Column="0" Grid.Row="6"
+                   Text="Клуб игрока:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <ComboBox Name="CbxSixthParam"
+                 Grid.Column="1" Grid.Row="6"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 IsEditable="False"
+                 Width="200"/>
+
+        <!-- Седьмой параметр записи -->
+        <TextBlock Name="TblSeventhParam"
+                   Grid.Column="0" Grid.Row="7"
+                   Text="Год принятия игрока в команду:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <TextBox Name="TbxSeventhParam"
+                 Grid.Column="1" Grid.Row="7"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 KeyDown="TextBox_KeyDown"
+                 Width="200"/>
+
+        <!-- Восьмой параметр записи -->
+        <TextBlock Name="TblEathParam"
+                   Grid.Column="0" Grid.Row="8"
+                   Text="Фото игрока:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <Button Name="BtnEathParam"
+                Grid.Column="1" Grid.Row="8"
+                FontSize="18"
+                Content="Выбрать фото..."
+                Click="LoadImage_Click"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="200"
+                />
+
+        <!-- Девятый параметр записи -->
+        <TextBlock Name="TblNinethParam"
+                   Grid.Column="0" Grid.Row="9"
+                   Text="Контракт игрока:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <TextBox Name="TbxNinethParam"
+                 Grid.Column="1" Grid.Row="9"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 Width="200"/>
+
+        <!-- Десятый параметр записи -->
+        <TextBlock Name="TblTenthParam"
+                   Grid.Column="0" Grid.Row="10"
+                   Text="Стоимость контракта:"
+                   FontSize="18"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"/>
+
+        <TextBox Name="TbxTenthParam"
+                 Grid.Column="1" Grid.Row="10"
+                 FontSize="18"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"
+                 KeyDown="TextBox_KeyDown"
+                 Width="200"/>
+
+        <StackPanel Grid.ColumnSpan="2" Grid.Row="11"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <Button
+                Grid.Column="0"
+                Content="ОК"
+                Background="ForestGreen"
+                FontSize="18"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Margin="5"
+                Height="30"
+                Width="220"
+                Click="Accept_Click"
+            />
+
+            <Button
+                Grid.Column="0"
+                Content="Главная форма"
+                Background="IndianRed"
+                FontSize="18"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Margin="5"
+                Height="30"
+                Width="220"
+                IsCancel="True"
+            />
+        </StackPanel>
+
+    </Grid>
+</Window>

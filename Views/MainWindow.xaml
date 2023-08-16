@@ -1,0 +1,567 @@
+﻿<Window x:Class="Wpf_Kurvovaya_BD.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=DotNetProjects.DataVisualization.Toolkit"
+        xmlns:local="clr-namespace:Wpf_Kurvovaya_BD.Views"
+        mc:Ignorable="d"
+        Title="Курсовая работа Якубенко В.В. группа ПИ-21в" 
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Height="535" 
+        Width="1400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0"
+              Height="Auto"
+              FontSize="16"
+              VerticalAlignment="Top">
+            
+            <MenuItem Header="_Файл">
+                <MenuItem Header="Отчёт запроса в эксель" Click="PrinExcelFile"/>
+                <MenuItem Header="_Выход" 
+                          Click="Shutdown_Click">
+                    <MenuItem.Icon>
+                        <Image Source="../Images/Buttons/exit.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="Перечитать таблицу">
+                <MenuItem Header="Участие игроков в матчах" Click="RereadGameIns_Click"/>
+                <MenuItem Header="Информация о играх" Click="RereadGames_Click"/>
+                <MenuItem Header="Все наши игроки" Click="RereadGamers_Click"/>
+                <MenuItem Header="Наши клубы" Click="RereadOurClubs_Click"/>
+                <MenuItem Header="Клубы противника" Click="RereadEnemyClubs_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="Простые запросы">
+                <MenuItem Header="Учёт футболистов на определённой позиции"
+                          Click="QueryGamersByPosition"/>
+                <MenuItem Header="Игры, проходящие в определённой стране"
+                          Click="QueryGamesByCountry"/>
+                <MenuItem Header="Игры определённой даты"
+                          Click="QueryGamesByDate"/>
+                <MenuItem Header="Игроки, родившиеся в определённую дату"
+                          Click="QueryGamersByBirthday"/>
+                <MenuItem Header="Игроки"
+                          Click="QueryFullGamers"/>
+                <MenuItem Header="Игры"
+                          Click="QueryFullGames"/>
+                <MenuItem Header="Наши клубы"
+                          Click="QueryFullOurClubs"/>
+                <MenuItem Header="Страны, в которых не проводились игры"
+                          Click="QueryNullCountryGames"/>
+                <MenuItem Header="Игроки, не учувствовавшие в матчах"
+                          Click="QueryNullGamerIns"/>
+                <MenuItem Header="Игроки, которые не участвовали в играх определённой даты"
+                          Click="QueryGamersNotSelDate"/>
+            </MenuItem>
+            
+            <MenuItem Header="Итоговые запросы">
+
+                <MenuItem Header="Количество проводимых игр всего и в странах" Click="QueryGamesCountryCount"/>
+                <MenuItem Header="Количество игроков в каждой команде со стоимостью контракта больше указанной" 
+                          Click="QueryClubGamersCost"/>
+                <MenuItem Header="Команды с средней стоимостью контракта игроков больше указанной" 
+                          Click="QueryClubGamersAvgCost"/>
+                <MenuItem Header="Команды, где суммарная стоимость контракта игроков на определённой позиции больше указанной" 
+                          Click="QueryExecClubsGamerPosSumCost"/>
+                <MenuItem Header="Количество игроков с минимальной стоимостью контракта в каждой команде" 
+                          Click="QueryClubGamersMaxCostCount"/>
+                <MenuItem Header="Клубы, находящиеся в городе Москва" 
+                          Click="QueryMoscowClubs"/>
+                <MenuItem Header="Клубы, находящиеся не в городе Москва" 
+                          Click="QueryNotMoscowClubs"/>
+                <Separator/>
+                <MenuItem Header="Участие игроков в матчах (case)" 
+                          Click="QueryCaseGameIns"/>
+                <MenuItem Header="Количество провведённых игр по странам за последний год" 
+                          Click="QueryWithoutIndex"/>
+                <MenuItem Header="Количество игроков в клубах со стоимостью контракта больше 50 000 000" 
+                          Click="QueryWithIndex"/>
+                <MenuItem Header="Игроки фамилия которых начинается на букву М" 
+                          Click="QueryMask"/>
+
+                <MenuItem Header="3 лучших футболиста каждой команды(голы) и 3 лучшие команды"
+                          Click="QueryFirstCurs">
+                    <MenuItem.Icon>
+                        <Image Source="../Images/Buttons/ball1.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Header="Cреднее количество забитых и пропущенных мячей каждым игроком и по каждой команде"
+                          Click="QuerySecondCurs">
+                    <MenuItem.Icon>
+                        <Image Source="../Images/Buttons/ball2.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Header="Количество игр и финансирование выбранного клуба за указанный год"
+                          Click="QueryThirdCurs">
+                    <MenuItem.Icon>
+                        <Image Source="../Images/Buttons/Stadium.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <MenuItem Header="Диаграмма" Click="PrintDiagram"/>
+        </Menu>
+
+        <ToolBarTray Grid.Row="1"
+                     MinHeight="30" Orientation="Horizontal">
+
+            <ToolBar Margin="5 0">
+                <TextBlock Text="Поле таблицы:"
+                           FontSize="15" 
+                           VerticalAlignment="Center"/>
+
+                <ComboBox Name="CbxColumn"
+                          Grid.Column="1" Grid.Row="4"
+                          FontSize="15"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          Width="200"/>
+
+                <TextBlock Text="Значение:"
+                           FontSize="15" 
+                           VerticalAlignment="Center"
+                           Margin="10 0 0 0"/>
+
+                <TextBox Name="TbxValue"
+                         FontSize="15"
+                         Width="150"/>
+
+                <Button Height="30" ToolTip="Удалить группу записей"
+                        Margin="5 0" Click="DeleteGroupByChoose">
+                    <Image Source="../Images/Buttons/Trash_1.png"/>
+                </Button>
+
+                <Button Height="30" ToolTip="Поиск по значению поля"
+                        Margin="5 0" Click="FindGroupByChoose">
+                    <Image Source="../Images/Buttons/loupe.png"/>
+                </Button>
+
+                <Button Height="30" ToolTip="Сортировка по возрастанию по выбранному полю"
+                        Margin="5 0" Click="SortAscByChoose">
+                    <Image Source="../Images/Buttons/sort_number.png"/>
+                </Button>
+
+                <Button Height="30" ToolTip="Сортировка по убыванию по выбранному полю"
+                        Margin="5 0" Click="SortDescByChoose">
+                    <Image Source="../Images/Buttons/sort_number_descending.png"/>
+                </Button>
+            </ToolBar>
+
+        </ToolBarTray>
+
+        <TabControl Name="TbcCollections" Grid.Row="2"
+                    FontSize="16"
+                    SelectionChanged="TbcCollections_SelectionChanged">
+
+            <TabItem Header="Информация о играх">
+                <TabItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Name="TblGames"  
+                                   FontSize="16" 
+                                   VerticalAlignment="Center"
+                                   Text="В таблице N записей"
+                                   HorizontalAlignment="Center"
+                        />
+                        <DataGrid Name="DgGames">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить..." Click="AddWindowGame_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/add.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Изменить..." Click="EditWindowGame_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/edit_button.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Удалить" Click="AskGameDelete_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/delete.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="№" Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Id}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="Дата проведения" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DateGame, StringFormat='dd.MM.yyyy'}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="Страна проведения" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Country}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="Уровень игры" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding GameLevel}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="Пропущенные мячи" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding CountFinish}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="Клуб противника" Width="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Opposing}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="Наш клуб" Width="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Club}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Наши клубы">
+                <TabItem.Content>
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <TextBlock Name="TblOurClubs"  
+                                       FontSize="16" 
+                                       VerticalAlignment="Center"
+                                       Text="В таблице N записей"
+                                       HorizontalAlignment="Center"
+                            />
+                        
+                        <DataGrid Name="DgOurClubs"
+                                  Height="190"
+                                  SelectionChanged="DgOurClubs_SelectionChanged">
+                            
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить..." Click="AddWindowOurClub_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/add.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Изменить..." Click="EditWindowOurClub_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/edit_button.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Удалить" Click="AskOurClubDelete_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/delete.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+                            
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Width="30" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="Название клуба" Width="150" Binding="{Binding Club}"/>
+                                <DataGridTextColumn Header="Тренировочная база" Binding="{Binding Base}"/>
+                                <DataGridTextColumn Header="Год создания" Binding="{Binding Year}"/>
+                                <DataGridTextColumn Header="Лига клуба" Width="120" Binding="{Binding League}"/>
+                                <DataGridTextColumn Header="Фамилия руководителя" Binding="{Binding Surname}"/>
+                                <DataGridTextColumn Header="Имя руководителя" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Отчество руководителя" Binding="{Binding Patronymic}"/>
+                                <DataGridTextColumn Header="Телефон руководителя" Binding="{Binding Phone}"/>
+                                <DataGridTextColumn Header="Город размещения" Binding="{Binding City}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <TextBlock Name="TblFivethParam"
+                                   Text="Игроки этого клуба:"
+                                   FontSize="18"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+
+                        <DataGrid Name="DgGamersByClub"
+                                  Height="150"
+                                  RowHeight="55">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Width="50" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="Фамилия игрока" Binding="{Binding Surname}"/>
+                                <DataGridTextColumn Header="Имя игрока" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Отчество игрока" Binding="{Binding Patronymic}"/>
+                                <DataGridTextColumn Header="Позиция на поле" Width="130" Binding="{Binding Position}"/>
+                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday}"/>
+                                <DataGridTextColumn Header="Клуб" Width="130" Binding="{Binding Club}"/>
+                                <DataGridTextColumn Header="Год принятия в команду" Binding="{Binding YearFact}"/>
+                                <DataGridTemplateColumn Header="Фото игрока" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Photo}" Width="50" Height="50"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Контракт игрока" Binding="{Binding Сomments}"/>
+                                <DataGridTextColumn Header="Стоимость контракта" Binding="{Binding Cost}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Клубы противника">
+                <TabItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Name="TblEnemyClubs"  
+                               FontSize="16" 
+                                   VerticalAlignment="Center"
+                               Text="В таблице N записей"
+                               HorizontalAlignment="Center"
+                               />
+                        <DataGrid Name="DgEnemyClubs" SelectionMode="Extended">
+
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить..." Click="AddWindowEnemyClub_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/add.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Изменить..." Click="EditWindowEnemyClub_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/edit_button.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Удалить" Click="AskEnemyClubDelete_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/delete.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Width="50" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="Название клуба" Width="150" Binding="{Binding Opposing}"/>
+                                <DataGridTextColumn Header="Страна размещения" Binding="{Binding Country}"/>
+                                <DataGridTextColumn Header="Фамилия трененра" Binding="{Binding SurnameCoach}"/>
+                                <DataGridTextColumn Header="Имя трененра"  Binding="{Binding NameCoach}"/>
+                                <DataGridTextColumn Header="Отчество трененра" Binding="{Binding PatronymicCoach}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Все наши игроки">
+                <TabItem.ContextMenu>
+                    <ContextMenu Name="CtxmGamers" FontSize="16">
+                        <MenuItem Header="Добавить игрока..." Click="AddWindowGamer_Click">
+                            <MenuItem.Icon>
+                                <Image Source="../Images/Buttons/add.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Редактировать игрока..." Click="EditWindowGamer_Click">
+                            <MenuItem.Icon>
+                                <Image Source="../Images/Buttons/edit_button.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Удалить игрока" Click="CascadeGameIns_Click">
+                            <MenuItem.Icon>
+                                <Image Source="../Images/Buttons/delete.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </TabItem.ContextMenu>
+
+                <TabItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Name="TblGamers"  
+                                   FontSize="16" 
+                                   VerticalAlignment="Center"
+                                   Text="В таблице N записей"
+                                   HorizontalAlignment="Center"
+                        />
+                        <DataGrid Name="DgGamers"
+                                  RowHeight="50">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Width="50" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="Фамилия игрока" Binding="{Binding Surname}"/>
+                                <DataGridTextColumn Header="Имя игрока" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Отчество игрока" Binding="{Binding Patronymic}"/>
+                                <DataGridTextColumn Header="Позиция на поле" Width="130" Binding="{Binding Position}"/>
+                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday, StringFormat='dd.MM.yyyy'}"/>
+                                <DataGridTextColumn Header="Клуб" Width="100" Binding="{Binding Club}"/>
+                                <DataGridTextColumn Header="Год принятия в команду" Binding="{Binding YearFact}"/>
+                                <DataGridTemplateColumn Header="Фото игрока" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Photo}" Width="50" Height="50"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Контракт игрока" Width="142">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Сomments}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Стоимость контракта, руб." Binding="{Binding Cost}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Участие игроков в матчах">
+                <TabItem.Content>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Name="TblParticipation"  
+                                   FontSize="16" 
+                                   VerticalAlignment="Center"
+                                   Text="В таблице N записей"
+                                   HorizontalAlignment="Center"
+                               />
+                        <DataGrid Name="DgParticipation">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить..." Click="AddWindowGameIn_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/add.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Изменить..." Click="EditWindowGameIn_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/edit_button.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Удалить" Click="AskGameInDelete_Click">
+                                        <MenuItem.Icon>
+                                            <Image Source="../Images/Buttons/delete.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="№" Width="50" Binding="{Binding Id}"/>
+                                <DataGridTextColumn Header="Фамилия игрока" Binding="{Binding Surname}"/>
+                                <DataGridTextColumn Header="Имя игрока" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Отчество игрока" Binding="{Binding Patronymic}"/>
+                                <DataGridTextColumn Header="Дата проведения" Binding="{Binding DateGame, StringFormat='dd.MM.yyyy'}"/>
+                                <DataGridTextColumn Header="Клуб противника" Width="150" Binding="{Binding Opposing}"/>
+                                <DataGridTextColumn Header="Наш клуб" Width="150" Binding="{Binding Club}"/>
+                                <DataGridTextColumn Header="Участие в игре" Binding="{Binding Order}"/>
+                                <DataGridTextColumn Header="Забитые мячи" Width="150" Binding="{Binding CountStart}"/>
+                                <DataGridTextColumn Header="Премия" Width="150" Binding="{Binding Salary}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Header="Справочники">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="2.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Vertical" 
+                                Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Width="220">
+                        <ComboBox Name="CbxHelpTables" 
+                                  FontSize="18" 
+                                  Margin="5"
+                                  IsEditable="False"
+                                  SelectionChanged="CbxHelpTables_SelectionChanged"/>
+                        <Button FontSize="18" Margin="5" Content="Добавить" Click="AddWindowHelpTable_Click"/>
+                        <Button FontSize="18" Margin="5" Content="Редактировать" Click="EditWindowHelpTable_Click"/>
+                        <Button FontSize="18" Margin="5" Content="Удалить" Click="AskHelpTableDelete_Click"/>
+
+                    </StackPanel>
+
+                    <DataGrid Name="DgAdditional"
+                              Grid.Column="1"
+                              Margin="5 0 5 5"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Диаграммы">
+                <StackPanel Orientation="Vertical"
+                            Margin="5">
+                    <TextBlock Text="Диаграмма запроса 'Количество проводимых игр по странам и всего'"
+                               TextAlignment="Center" FontSize="18"/>
+
+                    <charting:Chart Name="Histogram"
+                                    Height="380">
+                        
+                    </charting:Chart>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Результат поиска/выборки">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Name="TblChooseInfo"  
+                               FontSize="16" 
+                               Text="Из таблицы ... по условию ... отобрано N записей"
+                               HorizontalAlignment="Center"
+                               />
+                    <DataGrid Name="DgChoose"
+                              Margin="5 0 5 5"
+                              ColumnWidth="*">
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Результат запроса">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Name="TblSelect"  
+                               FontSize="16" 
+                               Text="Запрос '.....' вернул N записей"
+                               HorizontalAlignment="Center"
+                               />
+                    <DataGrid Name="DgSelect"
+                              Margin="5 0 5 5"
+                              ColumnWidth="*">
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+
+
+    </Grid>
+</Window>
